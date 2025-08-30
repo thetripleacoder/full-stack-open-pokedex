@@ -27,4 +27,9 @@ module.exports = {
     'no-console': 'error',
     'react/prop-types': 0,
   },
-};
+  settings: {
+    react: {
+      version: 'detect',
+    },
+  },
+}
