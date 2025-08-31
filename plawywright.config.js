@@ -1,12 +1,12 @@
-import { defineConfig } from '@playwright/test'
-export default defineConfig({
+// playwright.config.js
+const { defineConfig } = require('@playwright/test');
+
+module.exports = defineConfig({
   webServer: {
-    command: 'npm run start',
-    url: 'http://localhost:3000',
-    timeout: 120 * 1000,
+    command: 'npm start',
+    url: 'http://localhost:8080',
+    timeout: 180 * 1000,
     reuseExistingServer: !process.env.CI,
   },
-  use: {
-    baseURL: 'http://localhost:3000/',
-  },
-})
+  testDir: 'e2e-tests',
+});
