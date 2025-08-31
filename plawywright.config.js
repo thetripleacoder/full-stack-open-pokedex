@@ -1,5 +1,5 @@
 // playwright.config.js
-const { defineConfig } = require('@playwright/test');
+const { defineConfig } = require('@playwright/test')
 
 module.exports = defineConfig({
   webServer: {
@@ -9,4 +9,4 @@ module.exports = defineConfig({
     reuseExistingServer: !process.env.CI,
   },
   testDir: 'e2e-tests',
-});
+})
