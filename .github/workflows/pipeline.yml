@@ -13,6 +13,9 @@ jobs:
     outputs:
       skip_tagging: ${{ steps.skip_check.outputs.skip_tagging }}
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Check for #skip
         id: skip_check
         run: |
@@ -20,9 +23,6 @@ jobs:
           if [[ "${{ github.event.head_commit.message }}" == *"#skip"* ]]; then
             echo "skip_tagging=true" >> $GITHUB_OUTPUT
           fi
-
-      - name: Checkout code
-        uses: actions/checkout@v3
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -64,6 +64,9 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'push' && needs.simple_deployment_pipeline.outputs.skip_tagging == 'false' }}
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Bump patch version and push tag
         uses: anothrNick/github-tag-action@1.64.0
         env:
