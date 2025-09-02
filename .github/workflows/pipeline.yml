@@ -45,6 +45,20 @@ jobs:
         if: ${{ github.event_name == 'push' && steps.skip_check.outputs.skip_tagging == 'false' }}
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
 
+      - name: Notify Discord of build failure
+        if: failure()
+        uses: BubbleProd/discord-webhook-notify@v2
+        with:
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          severity: error
+          details: |
+            ❌ Build failed for `${{ github.repository }}`
+            🧪 Commit: `${{ github.event.head_commit.message }}`
+            🔗 Author: `${{ github.event.head_commit.author.name }}`
+            🔍 SHA: `${{ github.sha }}`
+          username: "CI Bot"
+          color: "#ff0000"
+
   tag_release:
     needs: [simple_deployment_pipeline]
     runs-on: ubuntu-latest
@@ -55,3 +69,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
+
+      - name: Notify Discord of successful deployment
+        uses: BubbleProd/discord-webhook-notify@v2
+        with:
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          severity: info
+          details: |
+            ✅ Deployment succeeded for `${{ github.repository }}`
+            🔖 Version bumped and tagged
+            📦 Commit: `${{ github.sha }}`
+          username: "CI Bot"
+          color: "#00ff00"
